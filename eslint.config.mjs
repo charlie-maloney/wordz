@@ -1,15 +1,18 @@
-import js from "@eslint/js";
-import globals from "globals";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js';
+import globals from 'globals';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import tseslint from 'typescript-eslint';
 
-const tsFilePatterns = ["**/*.{ts,tsx,cts,mts}"];
-const jsFilePatterns = ["**/*.{js,jsx,mjs,cjs}"];
-const reactFilePatterns = ["**/*.{jsx,tsx}"];
+const tsFilePatterns = ['**/*.{ts,tsx,cts,mts}'];
+const jsFilePatterns = ['**/*.{js,jsx,mjs,cjs}'];
+const reactFilePatterns = ['**/*.{jsx,tsx}'];
 
 const tsConfigs = tseslint
-  .config(...tseslint.configs.recommended, ...tseslint.configs.recommendedTypeChecked)
+  .config(
+    ...tseslint.configs.recommended,
+    ...tseslint.configs.recommendedTypeChecked,
+  )
   .map((config) => {
     if (!config.files) {
       return {
@@ -17,8 +20,8 @@ const tsConfigs = tseslint
         files: tsFilePatterns,
         languageOptions: {
           ...config.languageOptions,
-          ecmaVersion: "latest",
-          sourceType: "module",
+          ecmaVersion: 'latest',
+          sourceType: 'module',
           globals: {
             ...globals.browser,
             ...globals.node,
@@ -59,21 +62,21 @@ const reactRecommended = {
 };
 
 const reactJsxRuntime = {
-  ...react.configs.flat["jsx-runtime"],
+  ...react.configs.flat['jsx-runtime'],
   files: reactFilePatterns,
 };
 
 const reactHooksConfig = {
-  files: ["**/*.{ts,tsx,js,jsx}"],
+  files: ['**/*.{ts,tsx,js,jsx}'],
   plugins: {
-    "react-hooks": reactHooks,
+    'react-hooks': reactHooks,
   },
   rules: {
     ...reactHooks.configs.recommended.rules,
   },
   settings: {
     react: {
-      version: "detect",
+      version: 'detect',
     },
   },
 };
@@ -81,19 +84,19 @@ const reactHooksConfig = {
 export default [
   {
     ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "dist/**",
-      "next-env.d.ts",
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'dist/**',
+      'next-env.d.ts',
     ],
   },
   js.configs.recommended,
   {
     files: jsFilePatterns,
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: {
         ...globals.browser,
         ...globals.node,
