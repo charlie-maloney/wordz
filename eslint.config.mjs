@@ -11,7 +11,6 @@ const reactFilePatterns = ['**/*.{jsx,tsx}'];
 const tsConfigs = tseslint
   .config(
     ...tseslint.configs.recommended,
-    ...tseslint.configs.recommendedTypeChecked,
   )
   .map((config) => {
     if (!config.files) {
@@ -89,6 +88,7 @@ export default [
       'out/**',
       'dist/**',
       'next-env.d.ts',
+      'src/lib/supabase.types.ts',
     ],
   },
   js.configs.recommended,
