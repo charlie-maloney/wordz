@@ -7,14 +7,183 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: '13.0.5';
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
   };
   public: {
     Tables: {
-      [_ in never]: never;
+      practice_session_results: {
+        Row: {
+          correct: boolean;
+          created_at: string | null;
+          id: string;
+          session_id: string;
+          step_id: string;
+          word_id: string | null;
+        };
+        Insert: {
+          correct: boolean;
+          created_at?: string | null;
+          id?: string;
+          session_id: string;
+          step_id: string;
+          word_id?: string | null;
+        };
+        Update: {
+          correct?: boolean;
+          created_at?: string | null;
+          id?: string;
+          session_id?: string;
+          step_id?: string;
+          word_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'practice_session_results_session_id_fkey';
+            columns: ['session_id'];
+            isOneToOne: false;
+            referencedRelation: 'practice_sessions';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'practice_session_results_word_id_fkey';
+            columns: ['word_id'];
+            isOneToOne: false;
+            referencedRelation: 'words';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      practice_sessions: {
+        Row: {
+          correct_steps: number | null;
+          created_at: string | null;
+          filters: Json | null;
+          game_type: string;
+          id: string;
+          is_completed: boolean | null;
+          score_gained: number | null;
+          steps: Json;
+          total_steps: number;
+          updated_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          correct_steps?: number | null;
+          created_at?: string | null;
+          filters?: Json | null;
+          game_type: string;
+          id?: string;
+          is_completed?: boolean | null;
+          score_gained?: number | null;
+          steps: Json;
+          total_steps?: number;
+          updated_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          correct_steps?: number | null;
+          created_at?: string | null;
+          filters?: Json | null;
+          game_type?: string;
+          id?: string;
+          is_completed?: boolean | null;
+          score_gained?: number | null;
+          steps?: Json;
+          total_steps?: number;
+          updated_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      user_profiles: {
+        Row: {
+          created_at: string | null;
+          created_on: string | null;
+          id: string;
+          is_deleted: boolean | null;
+          name: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          created_on?: string | null;
+          id: string;
+          is_deleted?: boolean | null;
+          name: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          created_on?: string | null;
+          id?: string;
+          is_deleted?: boolean | null;
+          name?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      words: {
+        Row: {
+          added_on: string | null;
+          created_at: string | null;
+          definition: string;
+          id: string;
+          is_deleted: boolean | null;
+          last_practiced_on: string | null;
+          score: number | null;
+          updated_at: string | null;
+          user_id: string;
+          word: string;
+        };
+        Insert: {
+          added_on?: string | null;
+          created_at?: string | null;
+          definition: string;
+          id?: string;
+          is_deleted?: boolean | null;
+          last_practiced_on?: string | null;
+          score?: number | null;
+          updated_at?: string | null;
+          user_id: string;
+          word: string;
+        };
+        Update: {
+          added_on?: string | null;
+          created_at?: string | null;
+          definition?: string;
+          id?: string;
+          is_deleted?: boolean | null;
+          last_practiced_on?: string | null;
+          score?: number | null;
+          updated_at?: string | null;
+          user_id?: string;
+          word?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -152,6 +321,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
