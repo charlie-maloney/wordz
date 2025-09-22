@@ -1,6 +1,6 @@
 -- Create user_profiles table
 CREATE TABLE user_profiles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     created_on TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     is_deleted BOOLEAN DEFAULT FALSE,
@@ -10,7 +10,7 @@ CREATE TABLE user_profiles (
 -- Create words table
 CREATE TABLE words (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES user_profiles(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     word VARCHAR(255) NOT NULL,
     definition TEXT NOT NULL,
     score INTEGER DEFAULT 0,
@@ -23,7 +23,7 @@ CREATE TABLE words (
 -- Create practice_sessions table
 CREATE TABLE practice_sessions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES user_profiles(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     game_type VARCHAR(50) NOT NULL,
     is_completed BOOLEAN DEFAULT FALSE,
     steps JSONB NOT NULL,
