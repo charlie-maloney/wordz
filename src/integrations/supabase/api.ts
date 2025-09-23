@@ -1,11 +1,8 @@
 import { Database } from '@/lib/supabase.types';
-import { createServerClient, serializeCookieHeader } from '@supabase/ssr';
-import { type NextApiRequest, type NextApiResponse } from 'next';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
-export default function createClient(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function createClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -13,21 +10,17 @@ export default function createClient(
     throw new Error('Missing required Supabase environment variables');
   }
 
+  const cookieStore = await cookies();
+
   const supabase = createServerClient<Database>(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        return Object.keys(req.cookies).map((name) => ({
-          name,
-          value: req.cookies[name] || '',
-        }));
+        return cookieStore.getAll();
       },
       setAll(cookiesToSet) {
-        res.setHeader(
-          'Set-Cookie',
-          cookiesToSet.map(({ name, value, options }) =>
-            serializeCookieHeader(name, value, options),
-          ),
-        );
+        cookiesToSet.forEach(({ name, value, options }) => {
+          cookieStore.set(name, value, options);
+        });
       },
     },
   });
