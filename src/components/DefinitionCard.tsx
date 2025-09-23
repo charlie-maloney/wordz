@@ -23,27 +23,30 @@ interface WordData {
 
 interface WordDefinitionCardProps {
   selectedWord: WordData;
-  wordBank: Set<string>;
-  onAddToWordBank: (word: string) => void;
+  isInWordBank: boolean;
+  setIsInWordBank: (value: boolean) => void;
 }
 
 export default function DefinitionCard({
   selectedWord,
-  wordBank,
-  onAddToWordBank,
+  isInWordBank,
+  setIsInWordBank,
 }: WordDefinitionCardProps) {
+  const handleAddToWordBank = () => {
+    setIsInWordBank(!isInWordBank);
+  };
   return (
     <Card className=" rounded-lg border shadow-md">
       <CardHeader>
         <div className="flex items-center justify-between max-h-4">
           <CardTitle className="text-2xl">{selectedWord.word}</CardTitle>
           <Button
-            onClick={() => onAddToWordBank(selectedWord.word)}
-            disabled={wordBank.has(selectedWord.word)}
-            variant={wordBank.has(selectedWord.word) ? 'secondary' : 'default'}
-            className={wordBank.has(selectedWord.word) ? 'text-green-600' : ''}
+            onClick={handleAddToWordBank}
+            disabled={isInWordBank}
+            variant={isInWordBank ? 'secondary' : 'default'}
+            className={isInWordBank ? 'text-green-600' : ''}
           >
-            {wordBank.has(selectedWord.word) ? (
+            {isInWordBank ? (
               <>
                 <Check className="size-4 mr-2" />
                 Added

@@ -14,13 +14,10 @@ export const mockCheckAddWordRequest: CheckAddWordRequestDTO = {
 // /api/words/check-word
 export interface CheckAddWordResponseDTO {
   word: string;
-  definition: string;
   alreadyExists: boolean;
 }
 export const mockCheckAddWordResponse: CheckAddWordResponseDTO = {
   word: 'serendipity',
-  definition:
-    'The occurrence of events by chance in a happy or beneficial way.',
   alreadyExists: false,
 };
 

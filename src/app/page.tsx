@@ -5,6 +5,10 @@ import DefinitionCard from '@/components/DefinitionCard';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import {
+  mockCheckAddWordResponse,
+  CheckAddWordResponseDTO,
+} from '@/Mock/mockData';
 
 interface WordData {
   word: string;
@@ -20,11 +24,37 @@ interface WordData {
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [selectedWord, setSelectedWord] = useState<WordData | null>(null);
-  const [wordBank, setWordBank] = useState<Set<string>>(new Set());
+  const [isInWordBank, setIsInWordBank] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Function to check if word exists in word bank
+  const checkWordInDatabase = async (word: string): Promise<void> => {
+    console.log(`Checking if word "${word}" exists in database...`);
+
+    // ******************************
+    // TODO: Replace with actual API call
+    // ******************************
+
+    // For now, using mock data
+    const mockData: CheckAddWordResponseDTO = {
+      ...mockCheckAddWordResponse,
+      word: word,
+      alreadyExists: word.toLowerCase() === 'serendipity', // Only serendipity exists in mock
+    };
+
+    setIsInWordBank(mockData.alreadyExists);
+    console.log('Mock database response:', mockData);
+  };
+
+  useEffect(() => {
+    if (selectedWord) {
+      console.log('Selected word changed:', selectedWord);
+      checkWordInDatabase(selectedWord.word);
+    }
+  }, [selectedWord]);
 
   if (!mounted) {
     return null;
@@ -32,18 +62,7 @@ export default function Home() {
 
   const handleWordSelect = (wordData: WordData) => {
     setSelectedWord(wordData);
-  };
-
-  const handleAddToWordBank = (word: string) => {
-    setWordBank((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(word)) {
-        newSet.delete(word);
-      } else {
-        newSet.add(word);
-      }
-      return newSet;
-    });
+    setIsInWordBank(false);
   };
 
   return (
@@ -60,8 +79,8 @@ export default function Home() {
         {selectedWord && (
           <DefinitionCard
             selectedWord={selectedWord}
-            wordBank={wordBank}
-            onAddToWordBank={handleAddToWordBank}
+            isInWordBank={isInWordBank}
+            setIsInWordBank={setIsInWordBank}
           />
         )}
       </div>
