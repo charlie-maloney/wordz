@@ -1,23 +1,12 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-
 export default function Home() {
   return (
     <div>
-      <div>
-        <h1>Home</h1>
-        <div>
-          <Link href="/practice">
-            <Button>Practice</Button>
-          </Link>
-          <Link href="/word-bank">
-            <Button>Word Bank</Button>
-          </Link>
-          <Link href="/profile">
-            <Button>Profile</Button>
-          </Link>
-        </div>
+      <div className="container mx-auto flex flex-col items-center justify-center gap-2 py-3 md:flex-row">
+        <h1>Word Mate</h1>
+        <h2>Welcome to Word Mate</h2>
       </div>
+
+      <div></div>
     </div>
   );
 }

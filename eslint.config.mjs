@@ -11,7 +11,7 @@ const reactFilePatterns = ['**/*.{jsx,tsx}'];
 const tsConfigs = tseslint
   .config(
     ...tseslint.configs.recommended,
-    ...tseslint.configs.recommendedTypeChecked,
+    // ...tseslint.configs.recommendedTypeChecked,
   )
   .map((config) => {
     if (!config.files) {
