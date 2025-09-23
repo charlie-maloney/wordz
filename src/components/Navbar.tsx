@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ModeToggle from './ModeToggle';
 import {
   Sheet,
   SheetContent,
@@ -78,13 +79,14 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop Profile Link - Far right */}
-        <div className="hidden md:flex flex-1 justify-end">
+        <div className="hidden md:flex flex-1 justify-end items-center">
+          <ModeToggle />
           {profileItem.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                'transition-colors hover:text-foreground/80 text-sm font-medium',
+                'transition-colors hover:text-foreground/80 text-sm font-medium ml-6',
                 pathname === item.href
                   ? 'text-foreground'
                   : 'text-foreground/60',
@@ -145,6 +147,7 @@ export default function Navbar() {
                       {item.title}
                     </Link>
                   ))}
+                  <ModeToggle />
                 </div>
               </div>
             </SheetContent>
