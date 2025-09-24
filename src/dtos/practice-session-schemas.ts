@@ -8,6 +8,7 @@ export const CTSOptionSchema = z.object({
   sentence: z.string(),
   isCorrect: z.boolean(),
   keyWord: z.string(),
+  explanation: z.string().optional(),
 });
 
 export const CTSStepSchema = z.object({
