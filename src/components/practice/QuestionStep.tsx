@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import type { CTSStep } from '@/dtos/practice-session-schemas';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface QuestionStepProps {
   step: CTSStep;
@@ -62,22 +63,50 @@ export function QuestionStep({
           }
 
           return (
-            <Button
-              key={index}
-              variant={buttonVariant}
-              className={cn(
-                'w-full p-4 h-auto text-left justify-start text-wrap whitespace-normal',
-                showResult && option.isCorrect && 'ring-2 ring-green-500',
-                showResult &&
-                  selectedOption === index &&
-                  !option.isCorrect &&
-                  'ring-2 ring-red-500',
-              )}
-              onClick={() => !showResult && onAnswer(index)}
-              disabled={showResult}
-            >
-              {renderSentenceWithKeyword(option.sentence, option.keyWord)}
-            </Button>
+            <div key={index} className="space-y-2">
+              <Button
+                variant={buttonVariant}
+                className={cn(
+                  'w-full p-4 h-auto text-left justify-start text-wrap whitespace-normal',
+                  showResult && option.isCorrect && 'ring-2 ring-green-500',
+                  showResult &&
+                    selectedOption === index &&
+                    !option.isCorrect &&
+                    'ring-2 ring-red-500',
+                )}
+                onClick={() => !showResult && onAnswer(index)}
+                disabled={showResult}
+              >
+                {renderSentenceWithKeyword(option.sentence, option.keyWord)}
+              </Button>
+
+              <AnimatePresence>
+                {showResult &&
+                  (selectedOption === index || option.isCorrect) &&
+                  option.explanation && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0, y: -5 }}
+                      animate={{ opacity: 1, height: 'auto', y: 0 }}
+                      transition={{
+                        ease: 'easeOut',
+                      }}
+                      className={cn(
+                        'text-sm overflow-hidden',
+                        option.isCorrect
+                          ? ' text-green-800 '
+                          : ' text-red-800 ',
+                      )}
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-xs uppercase tracking-wide">
+                          {option.isCorrect ? 'Correct' : 'Incorrect'}:
+                        </span>
+                        <span>{option.explanation}</span>
+                      </div>
+                    </motion.div>
+                  )}
+              </AnimatePresence>
+            </div>
           );
         })}
       </CardContent>

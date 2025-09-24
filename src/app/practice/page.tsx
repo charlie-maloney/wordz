@@ -18,18 +18,24 @@ const mockSteps: CTSStep[] = [
     options: [
       {
         sentence: 'The beautiful garden was full of colorful flowers.',
+        explanation:
+          'This sentence correctly uses "beautiful" to describe the garden in a positive way.',
         isCorrect: true,
         keyWord: 'beautiful',
       },
       {
-        sentence: 'The ugly garden was full of colorful flowers.',
+        sentence: 'The beautiful garden was full of ugly flowers.',
+        explanation:
+          'This sentence contradicts the word "beautiful" by describing the flowers as ugly.',
         isCorrect: false,
-        keyWord: 'ugly',
+        keyWord: 'beautiful',
       },
       {
-        sentence: 'The small garden was full of colorful flowers.',
+        sentence: 'The beautiful garden was full of dead flowers.',
+        explanation:
+          'This sentence contradicts the word "beautiful" by describing the flowers as dead.',
         isCorrect: false,
-        keyWord: 'small',
+        keyWord: 'beautiful',
       },
     ],
   },
@@ -40,19 +46,25 @@ const mockSteps: CTSStep[] = [
     word: 'quickly',
     options: [
       {
-        sentence: 'She walked slowly to the store yesterday.',
-        isCorrect: false,
-        keyWord: 'slowly',
-      },
-      {
         sentence: 'She walked quickly to the store yesterday.',
+        explanation:
+          'This sentence correctly uses "quickly" to describe the manner of walking.',
         isCorrect: true,
         keyWord: 'quickly',
       },
       {
-        sentence: 'She walked carefully to the store yesterday.',
+        sentence: 'She walked quickly to the wrong store yesterday.',
+        explanation:
+          'Although "quickly" is used, the focus on the wrong store makes it incorrect.',
         isCorrect: false,
-        keyWord: 'carefully',
+        keyWord: 'quickly',
+      },
+      {
+        sentence: 'She walked quickly but got lost yesterday.',
+        explanation:
+          'While "quickly" is used, the outcome of getting lost makes it incorrect.',
+        isCorrect: false,
+        keyWord: 'quickly',
       },
     ],
   },
@@ -63,19 +75,25 @@ const mockSteps: CTSStep[] = [
     word: 'enormous',
     options: [
       {
-        sentence: 'The tiny elephant trumpeted loudly in the zoo.',
-        isCorrect: false,
-        keyWord: 'tiny',
-      },
-      {
         sentence: 'The enormous elephant trumpeted loudly in the zoo.',
+        explanation:
+          'This sentence correctly uses "enormous" to describe the large size of the elephant.',
         isCorrect: true,
         keyWord: 'enormous',
       },
       {
-        sentence: 'The young elephant trumpeted loudly in the zoo.',
+        sentence: 'The enormous elephant whispered softly in the zoo.',
+        explanation:
+          'The action of whispering softly contradicts the idea of an "enormous" elephant.',
         isCorrect: false,
-        keyWord: 'young',
+        keyWord: 'enormous',
+      },
+      {
+        sentence: 'The enormous elephant hid behind a small tree.',
+        explanation:
+          'The idea of an "enormous" elephant hiding behind a small tree is unrealistic.',
+        isCorrect: false,
+        keyWord: 'enormous',
       },
     ],
   },
@@ -113,7 +131,7 @@ export default function PracticePage() {
       } else {
         setSessionComplete(true);
       }
-    }, 100);
+    }, 3000);
   };
 
   if (sessionComplete) {
