@@ -65,9 +65,10 @@ export function QuestionStep({
           return (
             <div key={index} className="space-y-2">
               <Button
+                size={'lg'}
                 variant={buttonVariant}
                 className={cn(
-                  'w-full p-4 h-auto text-left justify-start text-wrap whitespace-normal',
+                  'w-full',
                   showResult && option.isCorrect && 'ring-2 ring-green-500',
                   showResult &&
                     selectedOption === index &&
@@ -75,7 +76,7 @@ export function QuestionStep({
                     'ring-2 ring-red-500',
                 )}
                 onClick={() => !showResult && onAnswer(index)}
-                disabled={showResult}
+                // disabled={showResult}
               >
                 {renderSentenceWithKeyword(option.sentence, option.keyWord)}
               </Button>
