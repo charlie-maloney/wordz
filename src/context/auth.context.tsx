@@ -30,6 +30,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      const session = await supabase.auth.getSession();
+      if (session && !user) {
+        supabase.auth.signOut();
+      }
     };
 
     fetchUser();
@@ -43,7 +48,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     };
   }, [supabase]);
 
-  const isActiveSession = () => !!user;
+  const isActiveSession = () => {
+    return !!user && !user.is_anonymous;
+  };
   const getUser = () => user;
   const isAnon = () => !user;
 
@@ -54,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
   const signOut = () => {
     // TODO: Replace with actual Supabase sign out logic
-    console.log('User signed out');
+    supabase.auth.signOut();
   };
 
   return (

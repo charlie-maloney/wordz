@@ -18,6 +18,7 @@ export async function ensureAuthSession(): Promise<Session | null> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
   if (session) return session;
 
   // coalesce concurrent calls
