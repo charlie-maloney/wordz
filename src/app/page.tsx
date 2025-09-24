@@ -99,7 +99,6 @@ export default function Home() {
           />
         )}
       </div>
-      <div className="container mx-auto flex flex-col items-center justify-center gap-2 py-3 max-w-sm"></div>
     </div>
   );
 }
