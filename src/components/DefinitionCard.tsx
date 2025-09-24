@@ -43,7 +43,7 @@ export default function DefinitionCard({
     }
   };
   return (
-    <Card className=" rounded-lg border shadow-md">
+    <Card className=" rounded-lg border shadow-md max-w-85 md:min-w-[450px]">
       <CardHeader>
         <div className="flex items-center justify-between max-h-4">
           <CardTitle className="text-2xl">{selectedWord.word}</CardTitle>

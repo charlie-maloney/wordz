@@ -2,7 +2,7 @@
 
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
@@ -16,6 +16,8 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth.context';
+import SignIn from './SignIn';
 
 interface NavItem {
   title: string;
@@ -28,24 +30,13 @@ const navItems: NavItem[] = [
   { title: 'Word Bank', href: '/word-bank' },
 ];
 
-const profileItem: NavItem[] = [
-  { title: 'Profile', href: '/profile' },
-  // #Need to add a modal for sign in
-  // { title: 'Sign In', href: '/' },
-];
-
-// Combine all items for mobile navigation
-const allNavItems = [...navItems, ...profileItem];
-
 export default function Navbar() {
   // pathname is used to determine which page the user is on
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
-  //use state to manage sheet open/close
-  const [open, setOpen] = React.useState(false);
-
-  // Setting the state for whether or not the user is signed in. This would be replaced with actual authentication logic
-  // const [isSignedIn, setIsSignedIn] = React.useState(false);
+  // Use auth context for authentication state
+  const { isActiveSession, signOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -79,22 +70,33 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop Profile Link - Far right */}
-        <div className="hidden md:flex flex-1 justify-end items-center">
+        <div className="hidden md:flex flex-1 justify-end items-center ml-auto">
           <ModeToggle />
-          {profileItem.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'transition-colors hover:text-foreground/80 text-sm font-medium ml-6',
-                pathname === item.href
-                  ? 'text-foreground'
-                  : 'text-foreground/60',
-              )}
-            >
-              {item.title}
-            </Link>
-          ))}
+
+          {isActiveSession() && (
+            <>
+              <Link
+                href="/profile"
+                className={cn(
+                  'transition-colors hover:text-foreground/80 text-sm font-medium ml-6',
+                  pathname === '/profile'
+                    ? 'text-foreground'
+                    : 'text-foreground/60',
+                )}
+              >
+                Profile
+              </Link>
+              <Button
+                onClick={signOut}
+                className={cn(
+                  'transition-colors hover:text-foreground/80 text-sm font-medium ml-6',
+                )}
+              >
+                Log out
+              </Button>
+            </>
+          )}
+          <div className="ml-4">{!isActiveSession() && <SignIn />}</div>
         </div>
 
         {/* Mobile Layout */}
@@ -126,13 +128,14 @@ export default function Navbar() {
                     className="flex items-center"
                     onClick={() => setOpen(false)}
                   >
-                    <span className="font-bold text-xl">Word Mate</span>
+                    <span className="font-bold text-xl">Word Mate.</span>
                   </Link>
                 </SheetTitle>
               </SheetHeader>
               <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
                 <div className="flex flex-col space-y-3">
-                  {allNavItems.map((item) => (
+                  <ModeToggle />
+                  {navItems.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -147,7 +150,35 @@ export default function Navbar() {
                       {item.title}
                     </Link>
                   ))}
-                  <ModeToggle />
+                  {isActiveSession() && (
+                    <>
+                      <Link
+                        href="/profile"
+                        className={cn(
+                          'transition-colors hover:text-foreground/80 text-lg',
+                          pathname === '/profile'
+                            ? 'text-foreground'
+                            : 'text-foreground/60',
+                        )}
+                      >
+                        Profile
+                      </Link>
+                      <Button
+                        onClick={signOut}
+                        className={cn(
+                          'transition-colors hover:text-foreground/80 text-sm font-medium ml-0 mt-4 mr-8',
+                        )}
+                      >
+                        Log out
+                      </Button>
+                    </>
+                  )}
+
+                  {!isActiveSession() && (
+                    <div className="ml-0 mt-4">
+                      <SignIn />
+                    </div>
+                  )}
                 </div>
               </div>
             </SheetContent>
