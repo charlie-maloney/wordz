@@ -1,5 +1,4 @@
 import { CheckAddWordRequestSchema, CheckAddWordResponse } from '@/dtos';
-import { DictionaryResponse } from '@/dtos/dictionary';
 import createClient from '@/integrations/supabase/api';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -17,7 +16,9 @@ export async function POST(
   }
 
   const body = await req.json();
+
   const validatedBody = await CheckAddWordRequestSchema.parseAsync(body);
+
   const { word } = validatedBody;
 
   const { error, data } = await client
@@ -29,7 +30,6 @@ export async function POST(
     .single();
 
   if (error && error.code !== 'PGRST116') {
-    console.error('Database error:', error);
     return NextResponse.json(
       { error: 'Failed to check word' },
       { status: 500 },
@@ -43,41 +43,7 @@ export async function POST(
     });
   }
 
-  const fetchedWord = await fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(
-      word,
-    )}`,
-  );
-
-  if (!fetchedWord.ok) {
-    console.log('Fetched word not ok:', fetchedWord.statusText);
-    if (fetchedWord.status === 404) {
-      return NextResponse.json(
-        { error: `Word (${word}) not found in dictionary` },
-        { status: 404 },
-      );
-    }
-    return NextResponse.json(
-      { error: 'Failed to fetch word definition' },
-      { status: 500 },
-    );
-  }
-
-  const fetchedData: DictionaryResponse = await fetchedWord.json();
-
-  if (!Array.isArray(fetchedData) || fetchedData.length === 0) {
-    return NextResponse.json(
-      { error: `Word (${word}) not found in dictionary` },
-      { status: 404 },
-    );
-  }
-
-  const definition =
-    fetchedData[0]?.meanings?.[0]?.definitions?.[0]?.definition || '';
-
   return NextResponse.json({
     alreadyExists: false,
-    word: word,
-    definition,
   });
 }

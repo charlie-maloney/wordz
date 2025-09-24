@@ -1,6 +1,12 @@
 {
   "permissions": {
-    "allow": ["Bash(grep:*)", "Bash(yarn lint)"],
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(yarn lint)",
+      "Bash(npx shadcn:*)",
+      "Bash(yarn list:*)",
+      "Bash(yarn add:*)"
+    ],
     "deny": [],
     "ask": []
   }

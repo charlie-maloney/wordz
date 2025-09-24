@@ -2,7 +2,12 @@ import { Session } from '@supabase/supabase-js';
 import { createClient } from '../supabase/browser';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { AddWordRequest, WordResponse } from '@/dtos';
+import {
+  AddWordRequest,
+  ListWordsResponse,
+  PracticeSessionResponse,
+  WordResponse,
+} from '@/dtos';
 import { queryClient } from './provider';
 
 let inFlightEnsure: Promise<Session | null> | null = null;
@@ -44,7 +49,7 @@ api.interceptors.request.use(async (config) => {
 });
 
 export const useListWordsQuery = () =>
-  useQuery({
+  useQuery<ListWordsResponse, Error, ListWordsResponse>({
     queryKey: ['words'],
     queryFn: () =>
       api.get('/words').then((r) => {
@@ -71,3 +76,13 @@ export const useProfileQueryQuery = () =>
         return r.data;
       }),
   });
+
+export const useCreatePracticeSessionMutation = () => {
+  return useMutation<PracticeSessionResponse, Error, PracticeSessionResponse>({
+    mutationFn: () => api.post('/practice-sessions').then((r) => r.data),
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['practice-sessions'] });
+    },
+  });
+};

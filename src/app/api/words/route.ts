@@ -24,6 +24,26 @@ export async function POST(
   const body = await req.json();
   const validatedBody = await AddWordRequestSchema.parseAsync(body);
 
+  const alreadyExists = await client
+    .from('words')
+    .select('id')
+    .eq('user_id', currentUser.data.user.id)
+    .eq('word', validatedBody.word.toLowerCase())
+    .select()
+    .single();
+
+  // If the word already exists, return it instead of adding a duplicate
+  if (alreadyExists.data) {
+    return NextResponse.json({
+      id: alreadyExists.data.id,
+      word: validatedBody.word.toLowerCase(),
+      addedOn: alreadyExists.data.created_at,
+      // TODO: update when implementing practice sessions
+      lastPracticedOn: new Date(0).toISOString(),
+      score: alreadyExists.data.score,
+    });
+  }
+
   const { error, data } = await client
     .from('words')
     .insert({
