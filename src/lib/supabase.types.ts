@@ -39,6 +39,7 @@ export type Database = {
           correct: boolean;
           created_at: string | null;
           id: string;
+          score_delta: number | null;
           session_id: string;
           step_id: string;
           word_id: string | null;
@@ -47,6 +48,7 @@ export type Database = {
           correct: boolean;
           created_at?: string | null;
           id?: string;
+          score_delta?: number | null;
           session_id: string;
           step_id: string;
           word_id?: string | null;
@@ -55,6 +57,7 @@ export type Database = {
           correct?: boolean;
           created_at?: string | null;
           id?: string;
+          score_delta?: number | null;
           session_id?: string;
           step_id?: string;
           word_id?: string | null;
@@ -78,39 +81,30 @@ export type Database = {
       };
       practice_sessions: {
         Row: {
-          correct_steps: number | null;
           created_at: string | null;
-          filters: Json | null;
           game_type: string;
           id: string;
           is_completed: boolean | null;
-          score_gained: number | null;
           steps: Json;
           total_steps: number;
           updated_at: string | null;
           user_id: string;
         };
         Insert: {
-          correct_steps?: number | null;
           created_at?: string | null;
-          filters?: Json | null;
           game_type: string;
           id?: string;
           is_completed?: boolean | null;
-          score_gained?: number | null;
           steps: Json;
           total_steps?: number;
           updated_at?: string | null;
           user_id: string;
         };
         Update: {
-          correct_steps?: number | null;
           created_at?: string | null;
-          filters?: Json | null;
           game_type?: string;
           id?: string;
           is_completed?: boolean | null;
-          score_gained?: number | null;
           steps?: Json;
           total_steps?: number;
           updated_at?: string | null;
@@ -126,14 +120,16 @@ export type Database = {
           is_deleted: boolean | null;
           name: string;
           updated_at: string | null;
+          user_id: string;
         };
         Insert: {
           created_at?: string | null;
           created_on?: string | null;
-          id: string;
+          id?: string;
           is_deleted?: boolean | null;
           name: string;
           updated_at?: string | null;
+          user_id: string;
         };
         Update: {
           created_at?: string | null;
@@ -142,43 +138,38 @@ export type Database = {
           is_deleted?: boolean | null;
           name?: string;
           updated_at?: string | null;
+          user_id?: string;
         };
         Relationships: [];
       };
       words: {
         Row: {
-          added_on: string | null;
-          created_at: string | null;
-          definition: string;
+          added_on: string;
+          created_at: string;
           id: string;
-          is_deleted: boolean | null;
-          last_practiced_on: string | null;
-          score: number | null;
-          updated_at: string | null;
+          is_deleted: boolean;
+          score: number;
+          updated_at: string;
           user_id: string;
           word: string;
         };
         Insert: {
-          added_on?: string | null;
-          created_at?: string | null;
-          definition: string;
+          added_on?: string;
+          created_at?: string;
           id?: string;
-          is_deleted?: boolean | null;
-          last_practiced_on?: string | null;
-          score?: number | null;
-          updated_at?: string | null;
+          is_deleted?: boolean;
+          score?: number;
+          updated_at?: string;
           user_id: string;
           word: string;
         };
         Update: {
-          added_on?: string | null;
-          created_at?: string | null;
-          definition?: string;
+          added_on?: string;
+          created_at?: string;
           id?: string;
-          is_deleted?: boolean | null;
-          last_practiced_on?: string | null;
-          score?: number | null;
-          updated_at?: string | null;
+          is_deleted?: boolean;
+          score?: number;
+          updated_at?: string;
           user_id?: string;
           word?: string;
         };
