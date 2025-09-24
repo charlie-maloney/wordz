@@ -7,6 +7,7 @@ import {
   mockCheckAddWordResponse,
   CheckAddWordResponseDTO,
 } from '@/Mock/mockData';
+import { useAddWordMutation } from '@/integrations/react-query/api';
 
 interface WordData {
   word: string;
@@ -24,6 +25,8 @@ export default function Home() {
   const [selectedWord, setSelectedWord] = useState<WordData | null>(null);
   const [isInWordBank, setIsInWordBank] = useState<boolean>(false);
   const [userAuthenticated, setUserAuthenticated] = useState<boolean>(false);
+
+  const addWordMutation = useAddWordMutation();
 
   useEffect(() => {
     setMounted(true);
@@ -57,6 +60,7 @@ export default function Home() {
   // Function to add word to database
   const addWordToDatabase = async (word: string): Promise<void> => {
     console.log(`Adding word "${word}" to database...`);
+    await addWordMutation.mutateAsync({ word });
     console.log(`Word "${word}" has been added to your word bank!`);
     setIsInWordBank(true);
   };

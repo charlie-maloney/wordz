@@ -6,7 +6,6 @@ export const CheckAddWordRequestSchema = z.object({
 });
 
 export const CheckAddWordResponseSchema = z.object({
-  word: z.string(),
   alreadyExists: z.boolean(),
 });
 
