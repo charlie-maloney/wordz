@@ -3,6 +3,7 @@ import globals from 'globals';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
+import reactQuery from '@tanstack/eslint-plugin-query';
 
 const tsFilePatterns = ['**/*.{ts,tsx,cts,mts}'];
 const jsFilePatterns = ['**/*.{js,jsx,mjs,cjs}'];
@@ -11,7 +12,6 @@ const reactFilePatterns = ['**/*.{jsx,tsx}'];
 const tsConfigs = tseslint
   .config(
     ...tseslint.configs.recommended,
-    // ...tseslint.configs.recommendedTypeChecked,
   )
   .map((config) => {
     if (!config.files) {
@@ -70,6 +70,7 @@ const reactHooksConfig = {
   files: ['**/*.{ts,tsx,js,jsx}'],
   plugins: {
     'react-hooks': reactHooks,
+    'react-query': reactQuery,
   },
   rules: {
     ...reactHooks.configs.recommended.rules,
@@ -89,6 +90,7 @@ export default [
       'out/**',
       'dist/**',
       'next-env.d.ts',
+      'src/lib/supabase.types.ts',
     ],
   },
   js.configs.recommended,
