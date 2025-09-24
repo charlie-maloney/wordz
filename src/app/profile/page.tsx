@@ -1,7 +1,9 @@
+import ProfileCard from '@/components/ProfileCard';
+
 export default function ProfilePage() {
   return (
     <div>
-      <h1>Profile</h1>
+      <ProfileCard />
     </div>
   );
 }
