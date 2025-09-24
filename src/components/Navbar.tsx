@@ -16,7 +16,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/context/auth.context';
 import SignIn from './SignIn';
 
 interface NavItem {
@@ -36,7 +36,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   // Use auth context for authentication state
-  const { userAuthenticated, signOut } = useAuth();
+  const { isActiveSession, signOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -73,7 +73,7 @@ export default function Navbar() {
         <div className="hidden md:flex flex-1 justify-end items-center ml-auto">
           <ModeToggle />
 
-          {userAuthenticated && (
+          {isActiveSession() && (
             <>
               <Link
                 href="/profile"
@@ -96,7 +96,7 @@ export default function Navbar() {
               </Button>
             </>
           )}
-          <div className="ml-4">{!userAuthenticated && <SignIn />}</div>
+          <div className="ml-4">{!isActiveSession() && <SignIn />}</div>
         </div>
 
         {/* Mobile Layout */}
@@ -150,7 +150,7 @@ export default function Navbar() {
                       {item.title}
                     </Link>
                   ))}
-                  {userAuthenticated && (
+                  {isActiveSession() && (
                     <>
                       <Link
                         href="/profile"
@@ -174,7 +174,7 @@ export default function Navbar() {
                     </>
                   )}
 
-                  {!userAuthenticated && (
+                  {!isActiveSession() && (
                     <div className="ml-0 mt-4">
                       <SignIn />
                     </div>
