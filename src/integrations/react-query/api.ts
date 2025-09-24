@@ -78,7 +78,7 @@ export const useProfileQueryQuery = () =>
   });
 
 export const useCreatePracticeSessionMutation = () => {
-  return useMutation<PracticeSessionResponse, Error, PracticeSessionResponse>({
+  return useMutation<PracticeSessionResponse, Error, void>({
     mutationFn: () => api.post('/practice-sessions').then((r) => r.data),
     onSuccess: () => {
       // Invalidate and refetch
