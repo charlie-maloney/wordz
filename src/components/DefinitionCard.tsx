@@ -25,15 +25,22 @@ interface WordDefinitionCardProps {
   selectedWord: WordData;
   isInWordBank: boolean;
   setIsInWordBank: (value: boolean) => void;
+  onAddWord?: (word: string) => Promise<void>;
 }
 
 export default function DefinitionCard({
   selectedWord,
   isInWordBank,
   setIsInWordBank,
+  onAddWord,
 }: WordDefinitionCardProps) {
-  const handleAddToWordBank = () => {
-    setIsInWordBank(!isInWordBank);
+  const handleAddToWordBank = async () => {
+    if (!isInWordBank && onAddWord) {
+      await onAddWord(selectedWord.word);
+    } else if (isInWordBank) {
+      // Handle removal logic if needed (for now just toggle)
+      setIsInWordBank(false);
+    }
   };
   return (
     <Card className=" rounded-lg border shadow-md">

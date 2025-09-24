@@ -20,10 +20,6 @@ interface DictionaryApiResponse {
       example?: string;
     }[];
   }[];
-  phonetics?: {
-    text?: string;
-    audio?: string;
-  }[];
 }
 
 interface WordData {
@@ -56,43 +52,67 @@ export default function SearchCommand({ onWordSelect }: SearchCommandProps) {
   // #This could be moved to a separate utility file if needed elsewhere
 
   const searchDictionaryAPI = async (word: string): Promise<string[]> => {
-    const response = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${word.trim()}`,
-    );
+    const trimmedWord = word.trim().toLowerCase();
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('Word not found');
-      }
-      throw new Error('Failed to fetch word definition');
+    // Basic validation - filter out obvious non-words
+    if (
+      trimmedWord.length < 2 ||
+      !/^[a-zA-Z]+$/.test(trimmedWord) || // Only letters
+      /(.)\1{2,}/.test(trimmedWord)
+    ) {
+      // No more than 2 consecutive identical letters
+      return [];
     }
 
-    const data: DictionaryApiResponse[] = await response.json();
+    try {
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${trimmedWord}`,
+      );
 
-    // Return unique word names
-    const uniqueWords = [...new Set(data.map((entry) => entry.word))];
-    return uniqueWords.slice(0, 10);
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Word not found is expected, return empty array silently
+          return [];
+        }
+        throw new Error('Failed to fetch word definition');
+      }
+
+      const data: DictionaryApiResponse[] = await response.json();
+
+      // Return unique word names
+      const uniqueWords = [...new Set(data.map((entry) => entry.word))];
+      return uniqueWords.slice(0, 10);
+    } catch {
+      // Silently handle network errors or invalid JSON
+      return [];
+    }
   };
 
   // Function to fetch full word data including definitions
   // #This could be moved to a separate utility file if needed elsewhere
 
   const fetchFullWordData = async (word: string): Promise<WordData> => {
-    const response = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${word.trim()}`,
-    );
+    const trimmedWord = word.trim().toLowerCase();
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch word definition');
+    try {
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${trimmedWord}`,
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch word definition');
+      }
+
+      const data: DictionaryApiResponse[] = await response.json();
+      const entry = data[0]; // Take the first entry
+
+      return {
+        word: entry.word,
+        meanings: entry.meanings,
+      };
+    } catch {
+      throw new Error(`Failed to fetch definition for "${word}"`);
     }
-
-    const data: DictionaryApiResponse[] = await response.json();
-    const entry = data[0]; // Take the first entry
-
-    return {
-      word: entry.word,
-      meanings: entry.meanings,
-    };
   };
 
   useEffect(() => {
@@ -158,12 +178,13 @@ export default function SearchCommand({ onWordSelect }: SearchCommandProps) {
       </div>
       <CommandList>
         {displayWords.length > 0 && (
-          <CommandGroup heading="Dictionary Results">
+          <CommandGroup>
             {displayWords.map((word, index) => (
               <CommandItem
                 key={`${word}-${index}`}
                 onSelect={() => handleWordSelect(word)}
-                className="cursor-pointer"
+                className="cursor-pointer "
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="font-medium">{word}</span>
@@ -172,6 +193,20 @@ export default function SearchCommand({ onWordSelect }: SearchCommandProps) {
             ))}
           </CommandGroup>
         )}
+
+        {displayWords.length === 0 &&
+          searchValue.trim().length > 0 &&
+          !isLoading && (
+            <CommandGroup>
+              <CommandItem disabled className="opacity-50 ">
+                <div className="flex items-center justify-center w-full">
+                  <span className="text-sm text-muted-foreground">
+                    Word not found
+                  </span>
+                </div>
+              </CommandItem>
+            </CommandGroup>
+          )}
 
         <CommandSeparator />
       </CommandList>

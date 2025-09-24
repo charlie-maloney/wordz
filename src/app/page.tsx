@@ -3,8 +3,6 @@
 import SearchCommand from '@/components/SearchCommand';
 import DefinitionCard from '@/components/DefinitionCard';
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import {
   mockCheckAddWordResponse,
   CheckAddWordResponseDTO,
@@ -25,29 +23,45 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [selectedWord, setSelectedWord] = useState<WordData | null>(null);
   const [isInWordBank, setIsInWordBank] = useState<boolean>(false);
+  const [userAuthenticated, setUserAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
+
+    // Check for session cookie/authentication
+    // TODO: Replace with actual session checking logic
+    console.log('User is not logged in');
+    setUserAuthenticated(false);
   }, []);
+
+  // Log userAuthenticated state for debugging
+  console.log('User authentication status:', userAuthenticated);
+
+  // ******************************
+  // TODO: Replace with actual API call
+  // ******************************
 
   // Function to check if word exists in word bank
   const checkWordInDatabase = async (word: string): Promise<void> => {
     console.log(`Checking if word "${word}" exists in database...`);
 
-    // ******************************
-    // TODO: Replace with actual API call
-    // ******************************
-
-    // For now, using mock data
     const mockData: CheckAddWordResponseDTO = {
       ...mockCheckAddWordResponse,
       word: word,
       alreadyExists: word.toLowerCase() === 'serendipity', // Only serendipity exists in mock
     };
-
     setIsInWordBank(mockData.alreadyExists);
     console.log('Mock database response:', mockData);
   };
+
+  // Function to add word to database
+  const addWordToDatabase = async (word: string): Promise<void> => {
+    console.log(`Adding word "${word}" to database...`);
+    console.log(`Word "${word}" has been added to your word bank!`);
+    setIsInWordBank(true);
+  };
+
+  // ******************************
 
   useEffect(() => {
     if (selectedWord) {
@@ -81,16 +95,11 @@ export default function Home() {
             selectedWord={selectedWord}
             isInWordBank={isInWordBank}
             setIsInWordBank={setIsInWordBank}
+            onAddWord={addWordToDatabase}
           />
         )}
       </div>
-      <div className="container mx-auto flex flex-col items-center justify-center gap-2 py-3 max-w-sm">
-        <Link href="/practice">
-          <Button variant="outline" className="px-20 py-7">
-            Practice
-          </Button>
-        </Link>
-      </div>
+      <div className="container mx-auto flex flex-col items-center justify-center gap-2 py-3 max-w-sm"></div>
     </div>
   );
 }
