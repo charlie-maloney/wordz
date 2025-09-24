@@ -51,12 +51,12 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         {/* Logo */}
-        <div className="mr-4 hidden md:flex">
+        <div className="mr-4 ml-4 hidden md:flex">
           <Link
             href="/"
             className="mr-6 flex items-center space-x-2 font-bold text-xl"
           >
-            Word Mate
+            Word Mate.
           </Link>
         </div>
 
@@ -102,9 +102,9 @@ export default function Navbar() {
           {/* Mobile Logo */}
           <Link
             href="/"
-            className="flex items-center space-x-2 font-bold text-xl"
+            className="flex items-center space-x-2 font-bold text-xl ml-4"
           >
-            Word Mate
+            Word Mate.
           </Link>
 
           {/* Mobile Navigation */}
